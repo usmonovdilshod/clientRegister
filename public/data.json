@@ -1,0 +1,21 @@
+[
+    {
+      "name": "Pepe",
+      "passportId": "AA9490175",
+      "phone": "993445673",
+      "price": "2000000"
+    },
+    {
+      "name": "Howm",
+      "passportId": "AA9330175",
+      "phone": "903445673",
+      "price": "2300000"
+    },
+    {
+      "name": "Amal",
+      "passportId": "AA9440175",
+      "phone": "993488973",
+      "price": "2364750"
+    }
+  ]
+  
