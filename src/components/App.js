@@ -1,101 +1,92 @@
-import React, { Component } from 'react';
-import '../css/App.css';
+import React, { Component } from "react";
+import "../css/App.css";
 
-import AddAppointments from './AddAppointments';
-import SearchAppointments from './SearchAppointments';
-import ListAppointments from './ListAppointments';
+import AddAppointments from "./AddAppointments";
+import SearchAppointments from "./SearchAppointments";
+import ListAppointments from "./ListAppointments";
 
-import { filter, find, findIndex, without } from 'lodash';
-import { each } from 'jquery';
-
+import { filter, find, findIndex, without } from "lodash";
+import { each } from "jquery";
 
 class App extends Component {
-  constructor() {
-    super();
-    this.state = {
-      myAppointments: [],
-      formDisplay: false,
-      orderBy: 'name',
-      orderDir: 'asc',
-      queryText: '',
-      lastIndex: 0
-    };
-    this.deleteAppointment = this.deleteAppointment.bind(this);
-    this.toggleForm = this.toggleForm.bind(this);
-    this.changeOrder = this.changeOrder.bind(this);
-    this.searchApts = this.searchApts.bind(this);
-  }
+  state = {
+    myAppointments: [],
+    formDisplay: false,
+    orderBy: "name",
+    orderDir: "asc",
+    queryText: "",
+    lastIndex: 0,
+  };
 
-  toggleForm() {
+  toggleForm = () => {
     this.setState({
-      formDisplay: !this.state.formDisplay
+      formDisplay: !this.state.formDisplay,
     });
-  }
+  };
 
-  searchApts(query) {
+  searchApts = (query) => {
     this.setState({
-      queryText: query
+      queryText: query,
     });
-  }
+  };
 
-  changeOrder(order, dir) {
+  changeOrder = (order, dir) => {
     this.setState({
       orderBy: order,
-      orderDir: dir
+      orderDir: dir,
     });
-  }
-  
+  };
 
-  deleteAppointment(apt) {
+  deleteAppointment = (apt) => {
     let tempApts = this.state.myAppointments;
     tempApts = without(tempApts, apt);
 
     this.setState({
-      myAppointments: tempApts
+      myAppointments: tempApts,
     });
-  }
-
+  };
 
   componentDidMount() {
     fetch(`/api/customers`)
-      .then(response => response.json())
-      .then(result => {
-        const apts = result.map(item => {
+      .then((response) => response.json())
+      .then((result) => {
+        const apts = result.map((item) => {
           item.aptId = this.state.lastIndex;
-          this.setState({ lastIndex: this.state.lastIndex + 1 })
+          this.setState({ lastIndex: this.state.lastIndex + 1 });
           return item;
         });
         this.setState({
-          myAppointments: apts
+          myAppointments: apts,
         });
       });
   }
 
   render() {
-
     let order;
     let filteredApts = this.state.myAppointments;
-    if (this.state.orderDir === 'asc') {
+    if (this.state.orderDir === "asc") {
       order = 1;
     } else {
       order = -1;
     }
 
-    filteredApts = filteredApts.sort((a, b) => {
-      if (a[this.state.orderBy].toLowerCase() <
-        b[this.state.orderBy].toLowerCase()
-      ) {
-        return -1 * order;
-      } else {
-        return 1 * order;
-      }
-    })
-      .filter(eachItem => {
+    filteredApts = filteredApts
+      .sort((a, b) => {
+        if (
+          a[this.state.orderBy].toLowerCase() <
+          b[this.state.orderBy].toLowerCase()
+        ) {
+          return -1 * order;
+        } else {
+          return 1 * order;
+        }
+      })
+      .filter((eachItem) => {
         return (
-          eachItem['name']
+          eachItem["name"]
             .toLowerCase()
             .includes(this.state.queryText.toLocaleLowerCase()) ||
-            eachItem['date']
+          eachItem["date"]
             .toLowerCase()
             .includes(this.state.queryText.toLocaleLowerCase())
         );
@@ -126,7 +117,6 @@ class App extends Component {
           </div>
         </div>
       </main>
-
     );
   }
 }
